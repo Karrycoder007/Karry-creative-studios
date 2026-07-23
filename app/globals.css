@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #FDFAF6;
+  --fg: #1C1008;
+  --fg-muted: #8B7355;
+  --accent: #5C1A1B;
+  --accent-warm: #A0522D;
+  --line: rgba(28, 16, 8, 0.12);
+  --surface: rgba(28, 16, 8, 0.03);
+}
+
+.dark {
+  --bg: #14100C;
+  --fg: #FDFAF6;
+  --fg-muted: #B9A98F;
+  --accent: #E8877A;
+  --accent-warm: #C8860A;
+  --line: rgba(253, 250, 246, 0.14);
+  --surface: rgba(253, 250, 246, 0.04);
+}
+
+* {
+  border-color: var(--line);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body), sans-serif;
+  transition: background 0.4s var(--ease, ease), color 0.4s ease;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/* thin custom scrollbar */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--fg-muted); border-radius: 4px; }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+/* custom cursor: native cursor hidden only once JS confirms a fine pointer device */
+.custom-cursor-active,
+.custom-cursor-active a,
+.custom-cursor-active button {
+  cursor: none;
+}
+
+.text-outline {
+  -webkit-text-stroke: 1.5px var(--fg);
+  color: transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
