@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import type { Testimonial } from '@/lib/testimonials';
+import type { Testimonial } from '@/lib/testimonial';
 
 const ease = [0.65, 0, 0.35, 1] as const;
 const AUTOPLAY_MS = 6000;
