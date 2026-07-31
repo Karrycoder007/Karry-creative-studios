@@ -1,23 +1,24 @@
 'use client';
 
-import { useLayoutEffect, useRef } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Image from 'next/image';
+import { Mail, Instagram, Youtube, Globe, ArrowUpRight } from 'lucide-react';
+import { ContactModal } from './ContactModal';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const socials = [
-  { label: 'Email', href: 'mailto:hello@karrycreative.studio', text: 'hello@karrycreative.studio' },
-  { label: 'Instagram', href: 'https://www.instagram.com/karrycoder007' },
-  { label: 'YouTube', href: 'https://www.youtube.com/@unfiltered_karry' },
-  { label: 'Portfolio', href: 'https://kartikbhat.me' },
+  { label: 'Email', href: 'mailto:hello@karrycreative.studio', text: 'hello@karrycreative.studio', Icon: Mail },
+  { label: 'Instagram', href: 'https://www.instagram.com/karrycoder007', text: '@karrycoder007', Icon: Instagram },
+  { label: 'YouTube', href: 'https://www.youtube.com/@unfiltered_karry', text: '@unfiltered_karry', Icon: Youtube },
+  { label: 'Portfolio', href: 'https://kartikbhat.me', text: 'kartikbhat.me', Icon: Globe },
 ];
-
-
 
 export function Footer() {
   const root = useRef<HTMLDivElement>(null);
+  const badgeRef = useRef<SVGSVGElement>(null);
+  const [contactOpen, setContactOpen] = useState(false);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -38,19 +39,19 @@ export function Footer() {
         scrollTrigger: { trigger: root.current, start: 'top 60%' },
       });
 
-      gsap.from('.footer-card', {
-        opacity: 0,
-        y: 40,
-        scale: 0.9,
-        duration: 0.9,
-        stagger: 0.12,
-        ease: 'power3.out',
-        scrollTrigger: { trigger: root.current, start: 'top 65%' },
-      });
-
       const marquee = root.current?.querySelector('.marquee-track');
       if (marquee) {
         gsap.to(marquee, { xPercent: -50, repeat: -1, duration: 14, ease: 'none' });
+      }
+
+      if (badgeRef.current) {
+        gsap.to(badgeRef.current, {
+          rotate: 360,
+          repeat: -1,
+          duration: 18,
+          ease: 'none',
+          transformOrigin: '50% 50%',
+        });
       }
     }, root);
     return () => ctx.revert();
@@ -82,58 +83,91 @@ export function Footer() {
         </div>
       </div>
 
-      {/* headline · card stack · socials */}
-      <div className="flex-1 flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-6 px-6 md:px-10 py-14 lg:py-0">
-        <a href="mailto:hello@karrycreative.studio" className="group block shrink-0">
+      {/* headline · rotating badge · socials */}
+      <div className="flex-1 flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-8 px-6 md:px-10 py-14 lg:py-0">
+        <div className="shrink-0 text-center lg:text-left">
           <h2
             className="font-body font-extrabold leading-[0.85] text-[16vw] sm:text-[13vw] lg:text-[7vw]"
             style={{ transform: 'skewX(-6deg)', letterSpacing: '-0.03em' }}
           >
             <div className="footer-line overflow-hidden">
-              <span className="block transition-colors duration-500 group-hover:opacity-70">Let&apos;s</span>
+              <span className="block">Let&apos;s</span>
             </div>
             <div className="footer-line overflow-hidden">
-              <span className="block transition-colors duration-500" style={{ color: 'var(--accent)' }}>
+              <span className="block" style={{ color: 'var(--accent)' }}>
                 talk.
               </span>
             </div>
           </h2>
-        </a>
 
-        {/* playing-card photo stack — fills the middle gap */}
-        {/* <div className="relative w-48 h-64 sm:w-56 sm:h-72 shrink-0 mx-auto lg:mx-0">
-          {cards.map((card, i) => (
-            <div
-              key={card.src}
-              className="footer-card absolute inset-0 rounded-md overflow-hidden shadow-xl"
-              style={{
-                transform: `rotate(${card.rotate}deg) translate(${card.x}px, ${card.y}px)`,
-                zIndex: card.z,
-                border: '1px solid var(--line)',
-              }}
+          <button
+            onClick={() => setContactOpen(true)}
+            className="footer-fade group inline-flex items-center gap-3 mt-6 md:mt-8 font-mono text-xs uppercase tracking-widest px-6 py-3 rounded-full transition-transform hover:scale-[1.03]"
+            style={{ background: 'var(--accent)', color: '#FDFAF6' }}
+          >
+            Start a project
+            <span className="inline-block transition-transform group-hover:translate-x-1">→</span>
+          </button>
+        </div>
+
+        {/* rotating "available for work" badge — fills the middle gap */}
+        <div className="footer-fade relative w-36 h-36 md:w-44 md:h-44 shrink-0 hidden sm:block">
+          <svg ref={badgeRef} viewBox="0 0 200 200" className="w-full h-full">
+            <defs>
+              <path id="footerCirclePath" d="M 100,100 m -82,0 a 82,82 0 1,1 164,0 a 82,82 0 1,1 -164,0" />
+            </defs>
+            <text
+              fontSize="11.5"
+              letterSpacing="3"
+              fill="var(--fg-muted)"
+              style={{ fontFamily: 'var(--font-mono)' }}
             >
-              <Image
-                src={card.src}
-                alt={`Himalaya photo ${i + 1}`}
-                fill
-                className="object-cover"
-                sizes="240px"
+              <textPath href="#footerCirclePath">
+                AVAILABLE FOR PROJECTS • WEB &amp; PHOTOGRAPHY • AVAILABLE FOR PROJECTS • WEB &amp; PHOTOGRAPHY •
+              </textPath>
+            </text>
+          </svg>
+          <div
+            className="absolute inset-0 m-auto flex items-center justify-center rounded-full"
+            style={{ width: '46%', height: '46%', background: 'var(--accent)' }}
+          >
+            <ArrowUpRight size={26} color="#FDFAF6" strokeWidth={1.75} />
+          </div>
+        </div>
+
+        {/* socials — luxury editorial list */}
+        <div className="footer-fade flex flex-col gap-0 shrink-0 w-full sm:w-auto max-w-xs sm:max-w-none">
+          {socials.map(({ label, href, text, Icon }, i) => (
+            <a
+              key={label}
+              href={href}
+              target={href.startsWith('http') ? '_blank' : undefined}
+              rel={href.startsWith('http') ? 'noreferrer' : undefined}
+              className="group flex items-center gap-4 py-3 border-t last:border-b"
+              style={{ borderColor: 'var(--line)' }}
+            >
+              <span
+                className="flex items-center justify-center w-8 h-8 rounded-full shrink-0 transition-colors duration-300 group-hover:bg-[var(--accent)] group-hover:border-transparent"
+                style={{ border: '1px solid var(--line)' }}
+              >
+                <Icon
+                  size={14}
+                  strokeWidth={1.5}
+                  className="opacity-70 group-hover:opacity-100 transition-colors duration-300 group-hover:text-[#FDFAF6]"
+                />
+              </span>
+
+              <span className="flex flex-col leading-tight">
+                <span className="font-mono text-[10px] uppercase tracking-widest opacity-40">{label}</span>
+                <span className="font-body text-sm md:text-base">{text}</span>
+              </span>
+
+              <ArrowUpRight
+                size={16}
+                strokeWidth={1.75}
+                className="ml-auto shrink-0 transition-transform duration-300 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                style={{ color: 'var(--accent)', transform: 'rotate(12deg)' }}
               />
-            </div>
-          ))}
-        </div> */}
-
-        {/* socials — moved to the far side, always visible */}
-        <div className="footer-fade flex flex-col items-center lg:items-end gap-3 font-mono text-xs md:text-sm uppercase tracking-widest opacity-70 shrink-0">
-          {socials.map((s) => (
-            
-              <a key={s.label}
-              href={s.href}
-              target={s.href.startsWith('http') ? '_blank' : undefined}
-              rel={s.href.startsWith('http') ? 'noreferrer' : undefined}
-              className="hover:opacity-100 transition-opacity border-b border-transparent hover:border-current pb-0.5"
-            >
-              {s.text ?? s.label}
             </a>
           ))}
         </div>
@@ -149,6 +183,9 @@ export function Footer() {
           <p>Goa, India — available worldwide</p>
         </div>
       </div>
+
+
+      <ContactModal open={contactOpen} onClose={() => setContactOpen(false)} />
     </footer>
   );
 }

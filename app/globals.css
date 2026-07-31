@@ -10,6 +10,8 @@
   --accent-warm: #A0522D;
   --line: rgba(28, 16, 8, 0.12);
   --surface: rgba(28, 16, 8, 0.03);
+  --ambient-1: #E3AE9C;
+  --ambient-2: #D6B36B;
 }
 
 .dark {
@@ -20,6 +22,8 @@
   --accent-warm: #C8860A;
   --line: rgba(253, 250, 246, 0.14);
   --surface: rgba(253, 250, 246, 0.04);
+  --ambient-1: var(--accent);
+  --ambient-2: var(--accent-warm);
 }
 
 * {
@@ -52,10 +56,16 @@ body {
   outline-offset: 3px;
 }
 /* custom cursor: native cursor hidden only once JS confirms a fine pointer device */
-.custom-cursor-active,
-.custom-cursor-active a,
-.custom-cursor-active button {
+/* custom cursor: native cursor hidden by default (custom ring/dot takes over),
+   but restored to a normal pointer over links/buttons — the custom cursor
+   hides itself in that state instead of morphing into an arrow */
+.custom-cursor-active {
   cursor: none;
+}
+.custom-cursor-active a,
+.custom-cursor-active button,
+.custom-cursor-active [role='button'] {
+  cursor: pointer;
 }
 
 .text-outline {

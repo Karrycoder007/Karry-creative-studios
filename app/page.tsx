@@ -1,6 +1,14 @@
 import { Hero } from '@/components/Hero';
 import { Footer } from '@/components/Footer';
 import Link from 'next/link';
+import HighLuxurySplitSection from '@/components/New';
+import { Testimonials } from '@/components/Testimonials';
+import { testimonials } from '@/lib/testimonial';
+import { Pricing } from '@/components/Pricing';
+import { pricingTiers } from '@/lib/pricing';
+import { FAQ } from '@/components/Faq';
+import { faqs } from '@/lib/faqs';
+
 
 const process = [
   { n: '01', title: 'Discover', copy: 'A direct call to understand the goal, not a form that disappears into a pipeline.' },
@@ -51,6 +59,9 @@ export default function Home() {
           ))}
         </div>
       </section>
+      <HighLuxurySplitSection/>
+      <Pricing tiers={pricingTiers}/>
+      <Testimonials items={testimonials} />
 
       {/* Cross-links */}
       <section className="grid md:grid-cols-2 border-t" style={{ borderColor: 'var(--line)' }}>
@@ -74,6 +85,8 @@ export default function Home() {
           </span>
         </Link>
       </section>
+      <FAQ items={faqs} />
+      
 
       <Footer />
     </>

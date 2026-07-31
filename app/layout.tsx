@@ -6,6 +6,9 @@ import { Navbar } from '@/components/Navbar';
 import { PageTransition } from '@/components/PageTransition';
 import { CustomCursor } from '@/components/CustomCursor';
 
+import { Preloader } from '@/components/Preloader';
+import { ContactModalProvider } from '@/components/ContactModalContext';
+
 const display = Cormorant_Garamond({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
@@ -38,10 +41,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${display.variable} ${body.variable} ${mono.variable} antialiased`}>
-        <ThemeProvider>
-          <CustomCursor/>
-          <Navbar />
-          <PageTransition>{children}</PageTransition>
+        <Preloader/>
+         <ThemeProvider>
+          <ContactModalProvider>
+            <CustomCursor />
+            <Navbar />
+            <PageTransition>{children}</PageTransition>
+          </ContactModalProvider>
         </ThemeProvider>
       </body>
     </html>
