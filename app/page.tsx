@@ -8,6 +8,9 @@ import { Pricing } from '@/components/Pricing';
 import { pricingTiers } from '@/lib/pricing';
 import { FAQ } from '@/components/Faq';
 import { faqs } from '@/lib/faqs';
+import { About } from '@/components/About';
+import { FeaturedProjects } from '@/components/FeauturedProjects';
+import { featuredProjects } from '@/lib/featuredProject';
 
 
 const process = [
@@ -27,6 +30,7 @@ export default function Home() {
   return (
     <>
       <Hero />
+      <About/>
 
       {/* Trust / process */}
       <section className="px-6 md:px-10 py-24 border-t" style={{ borderColor: 'var(--line)' }}>
@@ -46,6 +50,7 @@ export default function Home() {
           ))}
         </div>
       </section>
+      <FeaturedProjects projects={featuredProjects} />
 
       {/* Services */}
       <section className="px-6 md:px-10 py-24 border-t" style={{ borderColor: 'var(--line)' }}>

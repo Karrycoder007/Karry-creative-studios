@@ -4,25 +4,31 @@ import { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import Link from 'next/link';
 import { AmbientBackground } from './AmbientBackground';
+import { useLoader } from './LoaderContext';
 
 export function Hero() {
   const root = useRef<HTMLDivElement>(null);
+  const { loaded } = useLoader();
 
   useLayoutEffect(() => {
+    // wait for the preloader to actually finish before playing the
+    // entrance animation — otherwise it plays invisibly behind the curtain
+    if (!loaded) return;
+
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
       tl.from('.hero-line span', {
         yPercent: 110,
         duration: 1,
         stagger: 0.08,
-        delay: 0.4,
+        delay: 0.1,
       })
         .from('.hero-sub', { opacity: 0, y: 16, duration: 0.8 }, '-=0.7')
         .from('.hero-meta > *', { opacity: 0, y: 10, duration: 0.6, stagger: 0.1 }, '-=0.5')
         .from('.ambient-blob', { opacity: 0, scale: 0.6, duration: 1.4, stagger: 0.1 }, 0);
     }, root);
     return () => ctx.revert();
-  }, []);
+  }, [loaded]);
 
   return (
     <section ref={root} className="relative min-h-screen flex flex-col justify-center px-6 md:px-10 pt-28 pb-16 overflow-hidden">

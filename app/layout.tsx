@@ -8,6 +8,7 @@ import { CustomCursor } from '@/components/CustomCursor';
 
 import { Preloader } from '@/components/Preloader';
 import { ContactModalProvider } from '@/components/ContactModalContext';
+import { LoaderProvider } from '@/components/LoaderContext';
 
 const display = Cormorant_Garamond({
   subsets: ['latin'],
@@ -41,6 +42,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${display.variable} ${body.variable} ${mono.variable} antialiased`}>
+        <LoaderProvider>
         <Preloader/>
          <ThemeProvider>
           <ContactModalProvider>
@@ -49,6 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <PageTransition>{children}</PageTransition>
           </ContactModalProvider>
         </ThemeProvider>
+        </LoaderProvider>
       </body>
     </html>
   );
