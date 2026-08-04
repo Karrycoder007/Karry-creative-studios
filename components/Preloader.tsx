@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
+import { useLoader } from './LoaderContext';
 
 // Fixed brand colors regardless of light/dark mode — the preloader always
 // uses the same dark curtain treatment.
@@ -15,6 +16,7 @@ export function Preloader() {
   const textRef = useRef<HTMLDivElement>(null);
   const [count, setCount] = useState(0);
   const [done, setDone] = useState(false);
+  const { setLoaded } = useLoader();
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -23,16 +25,14 @@ export function Preloader() {
     const curve = { amt: 0 };
 
     const updatePath = () => {
-  if (!pathRef.current) return;
-  // half-moon: the two SIDE corners lift up (get pulled away) while
-  // the middle stays anchored at full coverage — like someone
-  // lifting a curtain by its two bottom corners, not the centre
-  const a = curve.amt;
-  pathRef.current.setAttribute(
-    'd',
-    `M0,0 L100,0 L100,${100 - a} Q50,100 0,${100 - a} Z`
-  );
-};
+      if (!pathRef.current) return;
+      const a = curve.amt;
+      pathRef.current.setAttribute(
+        'd',
+        `M0,0 L100,0 L100,${100 - a} Q50,100 0,${100 - a} Z`
+      );
+    };
+    updatePath();
 
     const tl = gsap.timeline({
       onComplete: () => {
@@ -43,13 +43,14 @@ export function Preloader() {
 
     tl.to(counter, {
       val: 100,
-      duration: 2,
+      duration: 1.5,
       ease: 'power2.out',
       onUpdate: () => setCount(Math.round(counter.val)),
     })
+      .call(() => setLoaded(true)) // let Hero's entrance animation start now
       .to(
         curve,
-        { amt: 26, duration: 0.75, ease: 'power2.inOut', onUpdate: updatePath },
+        { amt: 38, duration: 0.45, ease: 'power2.inOut', onUpdate: updatePath },
         '+=0.15'
       )
       .to(svgRef.current, { yPercent: -112, duration: 0.85, ease: 'power4.inOut' }, '-=0.15')

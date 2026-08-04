@@ -4,10 +4,11 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 
 const blobs = [
-  { color: 'var(--ambient-1)', size: 46, top: '10%', left: '8%', dur: 22, depth: 1.2 },
-  { color: 'var(--ambient-2)', size: 38, top: '55%', left: '68%', dur: 26, depth: 2.4 },
-  { color: 'var(--ambient-1)', size: 30, top: '68%', left: '15%', dur: 19, depth: 3.6 },
-  { color: 'var(--ambient-2)', size: 34, top: '5%', left: '70%', dur: 24, depth: 4.8 },
+  { color: 'var(--ambient-1)', size: 46, top: '8%', left: '6%', dur: 22, depth: 1.2 },
+  { color: 'var(--ambient-2)', size: 40, top: '52%', left: '68%', dur: 26, depth: 2.4 },
+  { color: 'var(--ambient-1)', size: 30, top: '66%', left: '12%', dur: 19, depth: 3.6 },
+  { color: 'var(--ambient-2)', size: 36, top: '2%', left: '68%', dur: 24, depth: 4.8 },
+  { color: 'var(--accent)', size: 20, top: '38%', left: '42%', dur: 17, depth: 3 },
 ];
 
 export function AmbientBackground() {
@@ -30,6 +31,12 @@ export function AmbientBackground() {
           ease: 'sine.inOut',
         });
       });
+
+      // slow rotating conic glow behind everything — adds depth without noise
+      const glow = root.querySelector('.ambient-glow');
+      if (glow) {
+        gsap.to(glow, { rotate: 360, repeat: -1, duration: 60, ease: 'none', transformOrigin: '50% 50%' });
+      }
     }, root);
 
     const setters = parallaxRefs.current.map((el, i) => {
@@ -61,6 +68,19 @@ export function AmbientBackground() {
 
   return (
     <div ref={rootRef} className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+      {/* slow rotating soft conic glow, sits behind the blobs for extra depth */}
+      <div
+        className="ambient-glow absolute rounded-full blur-3xl"
+        style={{
+          width: '70vw',
+          height: '70vw',
+          top: '-15vw',
+          left: '15vw',
+          background: 'conic-gradient(from 0deg, var(--ambient-1), transparent 30%, var(--ambient-2), transparent 70%, var(--ambient-1))',
+          opacity: 0.08,
+        }}
+      />
+
       {blobs.map((b, i) => (
         <div
           key={i}
@@ -74,12 +94,38 @@ export function AmbientBackground() {
           />
         </div>
       ))}
+
+      {/* subtle engineering grid — ties into the "engineered" positioning,
+          reads as structure/precision rather than decoration */}
+      <div
+        className="hero-grid absolute inset-0"
+        style={{
+          backgroundImage:
+            'linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px)',
+          backgroundSize: '64px 64px',
+          opacity: 0.25,
+          maskImage: 'radial-gradient(ellipse 70% 60% at 50% 40%, black 40%, transparent 90%)',
+          WebkitMaskImage: 'radial-gradient(ellipse 70% 60% at 50% 40%, black 40%, transparent 90%)',
+        }}
+      />
+
+      {/* fine grain for tactility */}
       <svg className="absolute inset-0 w-full h-full opacity-[0.035]">
         <filter id="heroGrain">
           <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" stitchTiles="stitch" />
         </filter>
         <rect width="100%" height="100%" filter="url(#heroGrain)" />
       </svg>
+
+      {/* soft vignette — pulls focus to the centre, gives the flat blobs
+          more atmospheric depth, closer to a photographic backdrop */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: 'radial-gradient(ellipse 70% 60% at 50% 45%, transparent 40%, var(--bg) 100%)',
+          opacity: 0.5,
+        }}
+      />
     </div>
   );
 }
