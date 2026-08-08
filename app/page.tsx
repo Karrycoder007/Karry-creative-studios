@@ -1,7 +1,7 @@
 import { Hero } from '@/components/Hero';
 import { Footer } from '@/components/Footer';
 import Link from 'next/link';
-import HighLuxurySplitSection from '@/components/New';
+
 import { Testimonials } from '@/components/Testimonials';
 import { testimonials } from '@/lib/testimonial';
 import { Pricing } from '@/components/Pricing';
@@ -21,7 +21,10 @@ const process = [
 ];
 
 const services = [
-  { title: 'Web Development', copy: 'Next.js / TypeScript / Tailwind sites that load fast and convert — built and owned by one engineer end to end.' },
+  {
+  title: 'Web Development',
+  copy: 'Next.js / TypeScript / Tailwind sites — from portfolios to full e-commerce builds — that load fast and convert. Built and owned by one engineer end to end.',
+},
   { title: 'Photography', copy: 'Travel, landscape, and expedition photography shot on-location across the Himalaya and beyond.' },
   { title: 'Filmmaking', copy: 'Cinematic travel and brand video — shot, edited, and graded for YouTube and campaign use.' },
 ];
@@ -64,32 +67,11 @@ export default function Home() {
           ))}
         </div>
       </section>
-      <HighLuxurySplitSection/>
+      
       <Pricing tiers={pricingTiers}/>
       <Testimonials items={testimonials} />
 
-      {/* Cross-links */}
-      <section className="grid md:grid-cols-2 border-t" style={{ borderColor: 'var(--line)' }}>
-        <Link
-          href="/work"
-          className="group px-6 md:px-10 py-20 md:py-28 border-b md:border-b-0 md:border-r flex flex-col justify-between"
-          style={{ borderColor: 'var(--line)' }}
-        >
-          <span className="font-mono text-xs uppercase tracking-widest opacity-50">Selected Work</span>
-          <span className="font-display text-4xl md:text-6xl mt-6 group-hover:translate-x-2 transition-transform">
-            See the projects →
-          </span>
-        </Link>
-        <Link
-          href="/photography"
-          className="group px-6 md:px-10 py-20 md:py-28 flex flex-col justify-between"
-        >
-          <span className="font-mono text-xs uppercase tracking-widest opacity-50">Behind the Lens</span>
-          <span className="font-display text-4xl md:text-6xl mt-6 group-hover:translate-x-2 transition-transform">
-            View photography →
-          </span>
-        </Link>
-      </section>
+      
       <FAQ items={faqs} />
       
 

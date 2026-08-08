@@ -8,7 +8,7 @@ export type Photo = {
 
 // Swap with real Panch Kedar / trek shots — /public/photography/
 export const photos: Photo[] = [
-  { id: 'p1', src: '/fromindiawithlove.png', alt: 'Kedarnath at dawn', location: 'Kedarnath', tall: true },
+  { id: 'p1', src: '/photography/placeholder-1.jpg', alt: 'Kedarnath at dawn', location: 'Kedarnath', tall: true },
   { id: 'p2', src: '/photography/placeholder-2.jpg', alt: 'Trail through the Himalaya', location: 'Madhyamaheshwar' },
   { id: 'p3', src: '/photography/placeholder-3.jpg', alt: 'Astro shot over the ridgeline', location: 'Tungnath' },
   { id: 'p4', src: '/photography/placeholder-4.jpg', alt: 'Prayer flags in the wind', location: 'Rudranath', tall: true },
