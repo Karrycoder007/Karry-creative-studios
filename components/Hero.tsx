@@ -109,10 +109,11 @@ export function Hero() {
           </div>
         </h1>
 
-        <p className="hero-subtitle max-w-lg mt-8 font-body text-sm md:text-base opacity-70 leading-relaxed">
-          Web development and photography, built by one person who ships both — Kartik Bhat.
-          Sites engineered in Next.js, stories shot in the Himalaya.
-        </p>
+       <p className="hero-subtitle max-w-lg mt-8 font-body text-sm md:text-base opacity-70 leading-relaxed">
+  Web development and photography for hotels, hospitality, and premium brands —
+  built by one person who ships both, Kartik Bhat. Sites engineered in Next.js,
+  stories shot in the Himalaya.
+</p>
 
         <Link
           href="/work"

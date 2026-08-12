@@ -1,6 +1,6 @@
 import { Hero } from '@/components/Hero';
 import { Footer } from '@/components/Footer';
-import Link from 'next/link';
+
 
 import { Testimonials } from '@/components/Testimonials';
 import { testimonials } from '@/lib/testimonial';
@@ -11,6 +11,9 @@ import { faqs } from '@/lib/faqs';
 import { About } from '@/components/About';
 import { FeaturedProjects } from '@/components/FeauturedProjects';
 import { featuredProjects } from '@/lib/featuredProject';
+import { PhotographyCategories } from '@/components/PhotographyCategories';
+import { photoCategories } from '@/lib/photoCategories';
+import { CombinedOfferBanner } from '@/components/Banner';
 
 
 const process = [
@@ -67,7 +70,8 @@ export default function Home() {
           ))}
         </div>
       </section>
-      
+      <PhotographyCategories categories={photoCategories} />
+      <CombinedOfferBanner/>
       <Pricing tiers={pricingTiers}/>
       <Testimonials items={testimonials} />
 

@@ -100,9 +100,11 @@ export function About() {
             One person, <span style={{ color: 'var(--accent)' }}>two crafts.</span>
           </h2>
           <p className="about-fade font-body text-base md:text-lg opacity-80 leading-relaxed max-w-xl mb-4">
-            I&apos;m Kartik Bhat — a web developer and photographer based in Goa, working under
-            Karry Creative Studios. Every project is built and shot by me directly, end to end:
-            no account managers, no handoffs, no diluted ownership of the outcome.
+  I&apos;m Kartik Bhat — a web developer and photographer based in Goa, working
+  primarily with hotels, hospitality brands, and premium clients who need both
+  crafts handled to the same standard. Every project is built and shot by me
+  directly, end to end: no account managers, no handoffs, no diluted ownership
+  of the outcome.
           </p>
           <p className="about-fade font-body text-base md:text-lg opacity-80 leading-relaxed max-w-xl mb-8">
             Sites are engineered in Next.js for speed and structure. Photography is shot

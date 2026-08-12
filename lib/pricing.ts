@@ -2,11 +2,12 @@ export type PricingTier = {
   id: string;
   name: string;
   tagline: string;
-  price: string;
-  priceNote: string;
+  priceIndia: string; // e.g. '₹25,000'
+  priceIntl?: string; // e.g. '$500' — set deliberately, not a straight currency conversion
+  priceNote: string; // e.g. 'onwards'
   features: string[];
   featured?: boolean;
-  custom?: boolean; // when true, hides the numeric price and shows a "Custom" CTA instead
+  custom?: boolean; // when true, hides numeric prices and shows a "Custom" CTA instead
 };
 
 export const pricingTiers: PricingTier[] = [
@@ -14,8 +15,9 @@ export const pricingTiers: PricingTier[] = [
     id: 'starter',
     name: 'Portfolio',
     tagline: 'Personal brands, freelancers, small studios',
-    price: '₹25,000 +',
-    priceNote: 'starting from',
+    priceIndia: '₹25,000',
+    priceIntl: '$500',
+    priceNote: 'onwards',
     features: [
       'Up to 5 pages, fully responsive',
       'Custom design — no templates',
@@ -28,8 +30,9 @@ export const pricingTiers: PricingTier[] = [
     id: 'signature',
     name: 'Signature',
     tagline: 'Hotels, hospitality, premium & celebrity brands',
-    price: '₹75,000 +',
-    priceNote: 'starting from',
+    priceIndia: '₹75,000',
+    priceIntl: '$1,400',
+    priceNote: 'onwards',
     features: [
       'Up to 10 pages, custom UI system',
       'Advanced GSAP / Framer Motion animation',
@@ -43,7 +46,7 @@ export const pricingTiers: PricingTier[] = [
     id: 'studio',
     name: 'Full Studio',
     tagline: 'E-commerce, complex builds, photography & SEO — fully bespoke',
-    price: 'Custom',
+    priceIndia: 'Custom',
     priceNote: 'scoped to your project',
     features: [
       'Everything in Signature',
