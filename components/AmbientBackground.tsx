@@ -24,7 +24,7 @@ export function AmbientBackground() {
         gsap.to(blob, {
           x: () => gsap.utils.random(-60, 60),
           y: () => gsap.utils.random(-50, 50),
-          scale: () => gsap.utils.random(0.85, 1.2),
+          // scale removed — was forcing re-rasterization of the blur every frame
           duration: blobs[i]?.dur ?? 20,
           repeat: -1,
           yoyo: true,
@@ -33,8 +33,9 @@ export function AmbientBackground() {
       });
 
       // slow rotating conic glow behind everything — adds depth without noise
-      const glow = root.querySelector('.ambient-glow');
+      const glow = root.querySelector<HTMLDivElement>('.ambient-glow');
       if (glow) {
+        gsap.set(glow, { willChange: 'transform' });
         gsap.to(glow, { rotate: 360, repeat: -1, duration: 60, ease: 'none', transformOrigin: '50% 50%' });
       }
     }, root);
@@ -48,9 +49,17 @@ export function AmbientBackground() {
       };
     });
 
-    const onMove = (e: MouseEvent) => {
-      const nx = e.clientX / window.innerWidth - 0.5;
-      const ny = e.clientY / window.innerHeight - 0.5;
+    // throttled to one update per animation frame instead of once per raw
+    // mousemove event — this was firing 5 tween starts on every pixel of
+    // mouse movement, stacked on top of CustomCursor's own 4 tweens
+    let raf: number | null = null;
+    let lastEvent: MouseEvent | null = null;
+
+    const applyMove = () => {
+      raf = null;
+      if (!lastEvent) return;
+      const nx = lastEvent.clientX / window.innerWidth - 0.5;
+      const ny = lastEvent.clientY / window.innerHeight - 0.5;
       setters.forEach((s) => {
         if (!s) return;
         s.x(nx * s.depth * -22);
@@ -58,10 +67,17 @@ export function AmbientBackground() {
       });
     };
 
-    window.addEventListener('mousemove', onMove);
+    const onMove = (e: MouseEvent) => {
+      lastEvent = e;
+      if (raf) return;
+      raf = requestAnimationFrame(applyMove);
+    };
+
+    window.addEventListener('mousemove', onMove, { passive: true });
 
     return () => {
       window.removeEventListener('mousemove', onMove);
+      if (raf) cancelAnimationFrame(raf);
       ctx.revert();
     };
   }, []);

@@ -9,6 +9,8 @@ export type FeaturedProject = {
   href?: string;
 };
 
+
+
 // Replace image paths with real project screenshots once ready.
 // Generate them at the SAME aspect ratio as imageAspect below so
 // object-cover never has to crop or upscale awkwardly.
@@ -26,7 +28,7 @@ export const featuredProjects: FeaturedProject[] = [
   },
   {
     id: 'fp-02',
-    title: 'Anita Raicar Prtfolio',
+    title: 'Anita Raicar Portfolio',
     category: 'Web Development',
     year: '2024',
     description:

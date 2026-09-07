@@ -46,15 +46,15 @@ export function CustomCursor() {
       if (target.closest(HOVER_SELECTOR)) setHovering(false);
     };
 
-    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mousemove', onMove, { passive: true });
     document.addEventListener('mouseover', onOver);
     document.addEventListener('mouseout', onOut);
 
     return () => {
       document.body.classList.remove('custom-cursor-active');
       window.removeEventListener('mousemove', onMove);
-      document.removeEventListener('mouseover', onOver);
-      document.removeEventListener('mouseout', onOut);
+      document.addEventListener('mouseenter', onOver, true);
+document.addEventListener('mouseleave', onOut, true);
     };
   }, [enabled]);
 
