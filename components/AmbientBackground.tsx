@@ -3,12 +3,11 @@
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 
+// reduced from 5 blobs to 2 — fewer blurred, animating elements is the
+// single biggest lever for lowering this component's ongoing GPU cost
 const blobs = [
   { color: 'var(--ambient-1)', size: 46, top: '8%', left: '6%', dur: 22, depth: 1.2 },
   { color: 'var(--ambient-2)', size: 40, top: '52%', left: '68%', dur: 26, depth: 2.4 },
-  { color: 'var(--ambient-1)', size: 30, top: '66%', left: '12%', dur: 19, depth: 3.6 },
-  { color: 'var(--ambient-2)', size: 36, top: '2%', left: '68%', dur: 24, depth: 4.8 },
-  { color: 'var(--accent)', size: 20, top: '38%', left: '42%', dur: 17, depth: 3 },
 ];
 
 export function AmbientBackground() {
@@ -19,24 +18,33 @@ export function AmbientBackground() {
     const root = rootRef.current;
     if (!root) return;
 
-    const ctx = gsap.context(() => {
-      root.querySelectorAll<HTMLDivElement>('.ambient-drift').forEach((blob, i) => {
-        gsap.to(blob, {
-          x: () => gsap.utils.random(-60, 60),
-          y: () => gsap.utils.random(-50, 50),
-          // scale removed — was forcing re-rasterization of the blur every frame
-          duration: blobs[i]?.dur ?? 20,
-          repeat: -1,
-          yoyo: true,
-          ease: 'sine.inOut',
-        });
-      });
+    let driftTweens: gsap.core.Tween[] = [];
+    let glowTween: gsap.core.Tween | null = null;
 
-      // slow rotating conic glow behind everything — adds depth without noise
+    const ctx = gsap.context(() => {
+      driftTweens = root.querySelectorAll<HTMLDivElement>('.ambient-drift').length
+        ? Array.from(root.querySelectorAll<HTMLDivElement>('.ambient-drift')).map((blob, i) =>
+            gsap.to(blob, {
+              x: () => gsap.utils.random(-60, 60),
+              y: () => gsap.utils.random(-50, 50),
+              duration: blobs[i]?.dur ?? 20,
+              repeat: -1,
+              yoyo: true,
+              ease: 'sine.inOut',
+            })
+          )
+        : [];
+
       const glow = root.querySelector<HTMLDivElement>('.ambient-glow');
       if (glow) {
         gsap.set(glow, { willChange: 'transform' });
-        gsap.to(glow, { rotate: 360, repeat: -1, duration: 60, ease: 'none', transformOrigin: '50% 50%' });
+        glowTween = gsap.to(glow, {
+          rotate: 360,
+          repeat: -1,
+          duration: 60,
+          ease: 'none',
+          transformOrigin: '50% 50%',
+        });
       }
     }, root);
 
@@ -49,15 +57,13 @@ export function AmbientBackground() {
       };
     });
 
-    // throttled to one update per animation frame instead of once per raw
-    // mousemove event — this was firing 5 tween starts on every pixel of
-    // mouse movement, stacked on top of CustomCursor's own 4 tweens
     let raf: number | null = null;
     let lastEvent: MouseEvent | null = null;
+    let parallaxEnabled = true;
 
     const applyMove = () => {
       raf = null;
-      if (!lastEvent) return;
+      if (!lastEvent || !parallaxEnabled) return;
       const nx = lastEvent.clientX / window.innerWidth - 0.5;
       const ny = lastEvent.clientY / window.innerHeight - 0.5;
       setters.forEach((s) => {
@@ -75,9 +81,25 @@ export function AmbientBackground() {
 
     window.addEventListener('mousemove', onMove, { passive: true });
 
+    // pause every animation in this component the moment the hero scrolls
+    // out of view, so nothing keeps burning frames once nobody can see it —
+    // this is the main fix: previously all of this ran for the entire
+    // session regardless of scroll position
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        const visible = entry.isIntersecting;
+        parallaxEnabled = visible;
+        driftTweens.forEach((t) => (visible ? t.play() : t.pause()));
+        if (glowTween) visible ? glowTween.play() : glowTween.pause();
+      },
+      { threshold: 0 }
+    );
+    io.observe(root);
+
     return () => {
       window.removeEventListener('mousemove', onMove);
       if (raf) cancelAnimationFrame(raf);
+      io.disconnect();
       ctx.revert();
     };
   }, []);
@@ -104,9 +126,14 @@ export function AmbientBackground() {
           className="ambient-parallax absolute will-change-transform"
           style={{ top: b.top, left: b.left, width: `${b.size}vw`, height: `${b.size}vw` }}
         >
+          {/* mix-blend-mode removed — blend modes force the browser to
+              recompute compositing against everything behind them on every
+              frame the element moves, which was the most expensive part of
+              this component. Plain opacity gives a near-identical look for
+              far less GPU cost. */}
           <div
-            className="ambient-drift ambient-blob w-full h-full rounded-full blur-3xl mix-blend-multiply dark:mix-blend-screen"
-            style={{ background: b.color, opacity: 0.22 }}
+            className="ambient-drift ambient-blob w-full h-full rounded-full blur-3xl"
+            style={{ background: b.color, opacity: 0.16 }}
           />
         </div>
       ))}

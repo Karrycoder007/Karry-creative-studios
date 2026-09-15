@@ -6,59 +6,35 @@ import Link from 'next/link';
 import { AmbientBackground } from './AmbientBackground';
 import { useLoader } from './LoaderContext';
 
-// splits a word into individual letter spans so GSAP can flip each one
-function FlipWord({ text }: { text: string }) {
-  return (
-    <span className="hero-flip-word inline-block" style={{ perspective: 500 }}>
-      {text.split('').map((char, i) => (
-        <span
-          key={i}
-          className="hero-flip-letter inline-block"
-          style={{ transformStyle: 'preserve-3d' }}
-        >
-          {char}
-        </span>
-      ))}
-    </span>
-  );
-}
-
 export function Hero() {
   const root = useRef<HTMLDivElement>(null);
   const { loaded } = useLoader();
 
   useLayoutEffect(() => {
-  if (!loaded) return;
+    if (!loaded) return;
 
-  const ctx = gsap.context(() => {
-    const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
 
-    tl.from('.hero-eyebrow', { opacity: 0, y: -10, duration: 1.1 }, 0.2)
-      .from(
-        '.hero-word-inner',
-        { yPercent: 115, opacity: 0, duration: 1.6, stagger: 0.32, transformOrigin: '0% 100%' },
-        0.6
-      )
-      .from(
-        '.hero-flip-letter',
-        {
-          rotateX: -100,
-          opacity: 0,
-          duration: 0.7,
-          stagger: 0.045,
-          transformOrigin: '50% 100%',
-          ease: 'back.out(1.7)',
-        },
-        '-=1.1'
-      )
-      .from('.hero-subtitle', { opacity: 0, y: 14, duration: 1 }, '-=0.3')
-      .from('.hero-cta', { opacity: 0, y: 12, scale: 0.96, duration: 0.9 }, '-=0.3')
-      .from('.ambient-blob', { opacity: 0, scale: 0.6, duration: 2.2, stagger: 0.18 }, 0)
-      .from('.hero-grid', { opacity: 0, duration: 2.4, ease: 'power2.out' }, 0);
-  }, root);
+      tl.from('.hero-eyebrow', { opacity: 0, y: -10, duration: 1.1 }, 0.2)
+        .from(
+          '.hero-word-inner',
+          { yPercent: 115, opacity: 0, duration: 1.6, stagger: 0.32, transformOrigin: '0% 100%' },
+          0.6
+        )
+        .from(
+          '.hero-accent-inner',
+          { yPercent: 115, opacity: 0, duration: 1.1, stagger: 0.15, transformOrigin: '0% 100%' },
+          '-=1.1'
+        )
+        .from('.hero-subtitle', { opacity: 0, y: 14, duration: 1 }, '-=0.3')
+        .from('.hero-cta', { opacity: 0, y: 12, scale: 0.96, duration: 0.9 }, '-=0.3')
+        .from('.ambient-blob', { opacity: 0, scale: 0.6, duration: 2.2, stagger: 0.18 }, 0)
+        .from('.hero-grid', { opacity: 0, duration: 2.4, ease: 'power2.out' }, 0);
+    }, root);
 
-  return () => ctx.revert();
-}, [loaded]);
+    return () => ctx.revert();
+  }, [loaded]);
 
   return (
     <section
@@ -80,7 +56,9 @@ export function Hero() {
             <span className="hero-word-inner block text-[2.6rem] sm:text-6xl md:text-7xl lg:text-8xl uppercase tracking-tight">
               Craft that{' '}
               <em style={{ fontStyle: 'italic', color: 'var(--accent)' }}>
-                <FlipWord text="travels" />
+                <span className="inline-block overflow-hidden align-bottom">
+                  <span className="hero-accent-inner inline-block">travels</span>
+                </span>
               </em>{' '}
               &amp;
             </span>
@@ -89,7 +67,9 @@ export function Hero() {
             <span className="hero-word-inner block text-[2.6rem] sm:text-6xl md:text-7xl lg:text-8xl uppercase tracking-tight">
               code that{' '}
               <em style={{ fontStyle: 'italic', color: 'var(--accent)' }}>
-                <FlipWord text="performs" />
+                <span className="inline-block overflow-hidden align-bottom">
+                  <span className="hero-accent-inner inline-block">performs</span>
+                </span>
               </em>
             </span>
           </div>
@@ -97,8 +77,8 @@ export function Hero() {
 
        <p className="hero-subtitle max-w-lg mt-8 font-body text-sm md:text-base opacity-70 leading-relaxed">
   Web development and photography for hotels, hospitality, and premium brands —
-  built by one person who ships both, Kartik Bhat. Sites engineered in Next.js,
-  stories shot in the Himalaya.
+  built end to end by one studio. Sites engineered in Next.js,
+  stories shot on location.
 </p>
 
         <Link

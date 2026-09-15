@@ -33,7 +33,7 @@ export const faqs: FAQ[] = [
     id: 'international',
     question: 'Do you work with clients outside India?',
     answer:
-      "Yes — I'm based in Goa but work with clients worldwide. Calls are scheduled across time zones, payments can be made internationally, and all communication happens over email or WhatsApp, whichever you prefer.",
+      "Yes — Studio Solarch is based in Goa but works with clients worldwide. Calls are scheduled across time zones, payments can be made internationally, and all communication happens over email or WhatsApp, whichever you prefer.",
   },
   {
     id: 'maintenance',

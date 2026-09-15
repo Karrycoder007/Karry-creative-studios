@@ -76,7 +76,7 @@ export function Preloader() {
 
       <div ref={textRef} className="absolute inset-0 flex flex-col items-center justify-center gap-4">
         <p className="font-display text-3xl md:text-4xl" style={{ color: SAND }}>
-          KARRY<span style={{ color: ACCENT }}>.</span>
+           Studio Solarch<span style={{ color: ACCENT }}>.</span>
         </p>
         <p className="font-mono text-xs tracking-widest" style={{ color: SAND, opacity: 0.55 }}>
           {count}%

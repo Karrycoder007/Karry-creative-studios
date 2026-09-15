@@ -179,7 +179,7 @@ export function Footer() {
           className="footer-fade flex flex-col md:flex-row justify-between pt-6 border-t font-mono text-[11px] opacity-50"
           style={{ borderColor: 'var(--line)' }}
         >
-          <p>© {new Date().getFullYear()} Karry Creative Studios. Kartik Bhat.</p>
+          <p>© {new Date().getFullYear()} Studio Solarch.</p>
           <p>Goa, India — available worldwide</p>
         </div>
       </div>

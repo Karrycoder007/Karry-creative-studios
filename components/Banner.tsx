@@ -58,8 +58,7 @@ export function CombinedOfferBanner() {
           </h2>
           <p className="max-w-xl mx-auto text-sm md:text-base opacity-70 leading-relaxed mb-14">
             Most clients hire a web developer and a photographer separately — different
-            visions, different timelines, extra coordination. Booking both from Karry
-            Creative Studios means one brief, one visual language, one person accountable
+            visions, different timelines, extra coordination. Booking both from Studio Solarch means one brief, one visual language, one person accountable 
             for the whole result.
           </p>
         </div>

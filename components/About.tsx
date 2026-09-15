@@ -83,7 +83,7 @@ export function About() {
           <div ref={imageRef} className="relative w-full h-full">
             <Image
               src="https://images.unsplash.com/photo-1785099159811-b7781d0b3878?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw0Mnx8fGVufDB8fHx8fA%3D%3D"
-              alt="Kartik Bhat"
+              alt="Studio Solarch — at work"
               fill
               className="object-cover "
               sizes="(min-width: 1024px) 28vw, 80vw"
@@ -97,19 +97,19 @@ export function About() {
             About
           </p>
           <h2 className="about-fade font-display text-big mb-6 max-w-xl">
-            One person, <span style={{ color: 'var(--accent)' }}>two crafts.</span>
+            One studio, <span style={{ color: 'var(--accent)' }}>two crafts.</span>
           </h2>
           <p className="about-fade font-body text-base md:text-lg opacity-80 leading-relaxed max-w-xl mb-4">
-  I&apos;m Kartik Bhat — a web developer and photographer based in Goa, working
-  primarily with hotels, hospitality brands, and premium clients who need both
-  crafts handled to the same standard. Every project is built and shot by me
-  directly, end to end: no account managers, no handoffs, no diluted ownership
-  of the outcome.
+            Studio Solarch is a web development and photography practice working
+            primarily with hotels, hospitality brands, and premium clients who need
+            both crafts handled to the same standard. Every project is built and shot
+            end to end by the same team: no account managers, no handoffs, no diluted
+            ownership of the outcome.
           </p>
           <p className="about-fade font-body text-base md:text-lg opacity-80 leading-relaxed max-w-xl mb-8">
             Sites are engineered in Next.js for speed and structure. Photography is shot
-            on-location — from client work to solo Himalayan expeditions — with the same
-            attention to detail on both sides of the lens.
+            on-location, brought back with the same attention to detail on both sides
+            of the lens.
           </p>
 
           {/* Stats/Tools Row */}
@@ -119,8 +119,8 @@ export function About() {
               <p className="opacity-60">TypeScript &amp; Tailwind</p>
             </div>
             <div>
-              <p className="text-2xl font-display italic mb-1" style={{ color: 'var(--accent)' }}>Sony a6700</p>
-              <p className="opacity-60">Viltrox 15mm f/1.7</p>
+              <p className="text-2xl font-display italic mb-1" style={{ color: 'var(--accent)' }}>Full Studio</p>
+              <p className="opacity-60">Web · Photography · Film</p>
             </div>
             <div>
               <p className="text-2xl font-display italic mb-1" style={{ color: 'var(--accent)' }}>Goa</p>

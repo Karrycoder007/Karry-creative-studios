@@ -29,7 +29,7 @@ export function PhotographyCategories({ categories }: { categories: PhotoCategor
         <div>
           <p className="font-mono text-xs uppercase tracking-widest opacity-50 mb-4">Behind the Lens</p>
           <h2 className="font-display text-big max-w-xl">
-            What I <span style={{ color: 'var(--accent)' }}>shoot.</span>
+            What we <span style={{ color: 'var(--accent)' }}>shoot.</span>
           </h2>
         </div>
         <Link

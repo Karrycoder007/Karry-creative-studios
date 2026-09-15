@@ -34,7 +34,7 @@ export const pricingTiers: PricingTier[] = [
     priceIntl: '$1,400',
     priceNote: 'onwards',
     features: [
-      'Up to 10 pages, custom UI system',
+      'Up to 6 pages, custom UI system',
       'Advanced GSAP / Framer Motion animation',
       'CMS-ready content (blog, gallery, listings)',
       'Multi-language / booking-flow ready',

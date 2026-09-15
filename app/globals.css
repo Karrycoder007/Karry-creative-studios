@@ -81,3 +81,7 @@ body {
     scroll-behavior: auto !important;
   }
 }
+
+p{
+ font-size: medium;
+}

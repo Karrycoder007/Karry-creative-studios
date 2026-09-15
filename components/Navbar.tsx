@@ -31,14 +31,14 @@ export function Navbar() {
   return (
     <>
       <header
-        className="fixed top-0 left-0 right-0 z-50 px-6 md:px-10 py-5 flex items-center justify-between backdrop-blur-md transition-colors"
+        className="fixed top-0 left-0 right-0 z-[75] px-6 md:px-10 py-5 flex items-center justify-between backdrop-blur-md transition-colors"
         style={{
           background: 'color-mix(in srgb, var(--bg) 65%, transparent)',
           borderBottom: '1px solid var(--line)',
         }}
       >
         <Link href="/" className="font-display text-xl md:text-2xl tracking-tight font-medium relative z-[70]">
-          KARRY<span style={{ color: 'var(--accent)' }}>.</span>
+          Studio Solarch<span style={{ color: 'var(--accent)' }}>.</span>
         </Link>
 
         {/* desktop nav */}
@@ -66,36 +66,41 @@ export function Navbar() {
         <div className="flex items-center gap-5">
           <ThemeToggle />
 
-          {/* hamburger / close patch — visible on all sizes, but nav links already show on desktop above md */}
-<motion.button
-  aria-label={open ? 'Close menu' : 'Open menu'}
-  aria-expanded={open}
-  onClick={() => setOpen((v) => !v)}
-  className="relative z-[70] w-10 h-10 flex md:hidden flex-col items-center justify-center gap-[6px] rounded-full"
-  animate={{
-    backgroundColor: open ? 'var(--accent-warm, #E8877A)' : 'transparent',
-  }}
-  transition={{ duration: 0.3, ease }}
->
-  <motion.span
-    className="block w-5 h-[1.5px] rounded-full"
-    animate={{
-      rotate: open ? 45 : 0,
-      y: open ? 4 : 0,
-      background: open ? '#FDFAF6' : 'var(--fg)',
-    }}
-    transition={{ duration: 0.35, ease }}
-  />
-  <motion.span
-    className="block w-5 h-[1.5px] rounded-full"
-    animate={{
-      rotate: open ? -45 : 0,
-      y: open ? -4 : 0,
-      background: open ? '#FDFAF6' : 'var(--fg)',
-    }}
-    transition={{ duration: 0.35, ease }}
-  />
-</motion.button>
+          {/* hamburger / close toggle — visible on mobile only */}
+          <motion.button
+            aria-label={open ? 'Close menu' : 'Open menu'}
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+            className="relative z-[70] w-10 h-10 flex md:hidden items-center justify-center rounded-full"
+            animate={{
+              backgroundColor: open ? 'var(--accent-warm, #E8877A)' : 'transparent',
+            }}
+            transition={{ duration: 0.3, ease }}
+          >
+            {/* fixed-size relative frame so both bars share one exact center point */}
+            <span className="relative block w-5 h-4">
+              <motion.span
+                className="absolute left-0 top-0 block w-5 h-[1.5px] rounded-full"
+                style={{ transformOrigin: 'center' }}
+                animate={{
+                  rotate: open ? 45 : 0,
+                  y: open ? 7 : 0,
+                  background: open ? '#FDFAF6' : 'var(--fg)',
+                }}
+                transition={{ duration: 0.35, ease }}
+              />
+              <motion.span
+                className="absolute left-0 bottom-0 block w-5 h-[1.5px] rounded-full"
+                style={{ transformOrigin: 'center' }}
+                animate={{
+                  rotate: open ? -45 : 0,
+                  y: open ? -7 : 0,
+                  background: open ? '#FDFAF6' : 'var(--fg)',
+                }}
+                transition={{ duration: 0.35, ease }}
+              />
+            </span>
+          </motion.button>
         </div>
       </header>
 
