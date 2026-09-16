@@ -1,63 +1,81 @@
-export type Project = {
-  id: string;
-  title: string;
-  category: string;
-  year: string;
-  description: string;
-  image: string;
-  href?: string;
-};
+import type { Project } from '@/components/FeaturedWork';
 
-// Swap image paths with real shots once you drop them into /public/projects
 export const projects: Project[] = [
   {
-    id: '01',
-    title: 'From India With Love',
-    category: 'Web Development',
-    year: '2025',
-    description: 'Next.js site for Mandar Apte — motion-led storytelling for a cross-border social initiative.',
-    image: '/photography/fromindiawithlove.png',
-    href: 'https://fromindiawithlove.org',
-  },
-  {
-    id: '02',
+    id: 'cities4peace',
     title: 'Cities4Peace',
     category: 'Web Development',
-    year: '2024',
-    description: 'Brand site for a peace-building initiative — chooselove.in, built for clarity and trust.',
-    image: '/photography/anita.png',
-    href: 'https://anitaraicar.in',
+    year: '2026',
+    image: '/work/cities4peace.jpg', // swap with your real screenshot
+    href: 'https://fromindiawithlove.org',
+    challenge:
+      'A Figma design needed converting into a full, production-ready site — homepage, films, podcast, about, contact, and trips pages.',
+    approach:
+      'Built in Next.js. GSAP ScrollTrigger replaced an unreliable Framer Motion whileInView setup, fixing inconsistent scroll animations across browsers.',
+    result:
+      'Site performance moved from the Lighthouse 60s into the 90–95 range, with animations now behaving consistently across every browser tested.',
+    metricLabel: 'Lighthouse Score',
+    metricValue: '60 → 95',
+  },
+
+  // --- Fill these in with your real project details ---
+  // I don\'t have this data, so these are placeholders only — replace
+  // every field below with what actually happened on each project.
+  {
+    id: 'project-2',
+    title: 'Project Title',
+    category: 'Web Development', // or 'Photography' / 'Filmmaking'
+    year: '2026',
+    image: '/work/project-2.jpg',
+    href: '#',
+    challenge: 'What did the client actually need?',
+    approach: 'What did you build, shoot, or set up — and how?',
+    result: 'What changed because of it?',
+    metricLabel: '', // e.g. 'Load Time', 'Pages Delivered' — omit if none
+    metricValue: '',
   },
   {
-    id: '03',
-    title: 'Project Three',
-    category: 'Web Development',
-    year: '2025',
-    description: 'Replace with your real project title and a one-line description of the problem it solved.',
-    image: '/photography/cleanroom.png',
+    id: 'project-3',
+    title: 'Project Title',
+    category: 'Photography',
+    year: '2026',
+    image: '/work/project-3.jpg',
+    href: '#',
+    challenge: '',
+    approach: '',
+    result: '',
   },
   {
-    id: '04',
-    title: 'Project Four',
-    category: 'Web Development',
-    year: '2025',
-    description: 'Replace with your real project title and a one-line description of the problem it solved.',
-    image: '/photography/grudhra.png',
+    id: 'project-4',
+    title: 'Project Title',
+    category: 'Filmmaking',
+    year: '2026',
+    image: '/work/project-4.jpg',
+    href: '#',
+    challenge: '',
+    approach: '',
+    result: '',
   },
   {
-    id: '05',
-    title: 'Project Five',
+    id: 'project-5',
+    title: 'Project Title',
     category: 'Web Development',
     year: '2026',
-    description: 'Replace with your real project title and a one-line description of the problem it solved.',
-    image: '/photography/portfolio.png',
+    image: '/work/project-5.jpg',
+    href: '#',
+    challenge: '',
+    approach: '',
+    result: '',
   },
   {
-    id: '06',
-    title: 'Project Six',
+    id: 'project-6',
+    title: 'Project Title',
     category: 'Web Development',
     year: '2026',
-    description: 'Replace with your real project title and a one-line description of the problem it solved.',
-    image: '/photography/trvael.png',
+    image: '/work/project-6.jpg',
+    href: '#',
+    challenge: '',
+    approach: '',
+    result: '',
   },
 ];

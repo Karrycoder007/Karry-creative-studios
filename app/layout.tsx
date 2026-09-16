@@ -34,7 +34,7 @@ const mono = DM_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Karry Creative Studios — Craft that travels. Code that performs.',
+  title: 'Studio Solarch. — Craft that travels. Code that performs.',
   description:
     'Web development and photography studio by Kartik Bhat. Websites built with precision, stories told with craft.',
 };

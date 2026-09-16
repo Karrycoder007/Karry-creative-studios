@@ -1,5 +1,6 @@
-import { ProjectStrip } from '@/components/ProjectStrip';
+
 import { Footer } from '@/components/Footer';
+import { FeaturedWork } from '@/components/ProjectStrip';
 import { projects } from '@/lib/projects';
 
 export default function WorkPage() {
@@ -12,7 +13,8 @@ export default function WorkPage() {
         </h1>
       </section>
 
-      <ProjectStrip projects={projects} />
+      <FeaturedWork projects={projects} />
+
 
       <section className="px-6 md:px-10 py-24 border-t" style={{ borderColor: 'var(--line)' }}>
         <p className="max-w-2xl font-body text-lg opacity-80 leading-relaxed">

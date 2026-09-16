@@ -4,60 +4,61 @@ import { useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Image from 'next/image';
-import type { Project } from '@/lib/projects';
+import { Code2, Camera, Clapperboard, ArrowUpRight } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export function ProjectStrip({ projects }: { projects: Project[] }) {
+// Extend your existing Project type in @/lib/projects with these optional
+// fields. Existing entries without them still render fine — every block
+// below is conditional.
+export type Project = {
+  id: string;
+  title: string;
+  category: string; // e.g. 'Web Development', 'Photography', 'Filmmaking'
+  year: string;
+  image: string;
+  href?: string;
+  challenge?: string;   // 1 sentence — what the client needed
+  approach?: string;    // 1 sentence — what was used / how it was done
+  result?: string;      // 1 sentence — what changed
+  metricLabel?: string; // e.g. 'Lighthouse Score'
+  metricValue?: string; // e.g. '60 → 95'
+};
+
+function iconForCategory(category: string) {
+  const c = category.toLowerCase();
+  if (c.includes('photo')) return Camera;
+  if (c.includes('film')) return Clapperboard;
+  return Code2;
+}
+
+export function FeaturedWork({ projects }: { projects: Project[] }) {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
 
   useLayoutEffect(() => {
     const section = sectionRef.current;
-    const track = trackRef.current;
-    if (!section || !track) return;
+    if (!section) return;
 
     const ctx = gsap.context(() => {
-      const scrollDistance = track.scrollWidth - window.innerWidth;
+      const rows = section.querySelectorAll<HTMLDivElement>('.work-row');
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: section,
-          start: 'top top',
-          end: () => `+=${scrollDistance + window.innerHeight}`,
-          scrub: 0.8,
-          pin: true,
-          anticipatePin: 1,
-        },
-      });
+      rows.forEach((row) => {
+        const image = row.querySelector('.work-image');
+        const fadeEls = row.querySelectorAll('.work-fade');
 
-      tl.to(track, { x: -scrollDistance, ease: 'none' });
-
-      // curved / draped effect: each card tilts based on its position
-      // relative to the viewport centre as the strip moves.
-      cardRefs.current.forEach((card) => {
-        if (!card) return;
-        ScrollTrigger.create({
-          trigger: section,
-          start: 'top top',
-          end: () => `+=${scrollDistance + window.innerHeight}`,
-          scrub: true,
-          onUpdate: () => {
-            const rect = card.getBoundingClientRect();
-            const centre = window.innerWidth / 2;
-            const distance = (rect.left + rect.width / 2 - centre) / centre; // -1..1
-            const rotateY = distance * -18;
-            const translateY = Math.abs(distance) * 40;
-            const scale = 1 - Math.min(Math.abs(distance), 1) * 0.12;
-            gsap.set(card, {
-              rotateY,
-              y: translateY,
-              scale,
-              transformPerspective: 1200,
-            });
-          },
+        const tl = gsap.timeline({
+          scrollTrigger: { trigger: row, start: 'top 80%' },
+          defaults: { ease: 'power3.out' },
         });
+
+        if (image) {
+          tl.fromTo(
+            image,
+            { clipPath: 'inset(0% 0% 100% 0%)' },
+            { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.1, ease: 'power4.inOut' }
+          );
+        }
+        tl.from(fadeEls, { opacity: 0, y: 26, duration: 0.9, stagger: 0.1 }, '-=0.65');
       });
     }, section);
 
@@ -65,55 +66,129 @@ export function ProjectStrip({ projects }: { projects: Project[] }) {
   }, []);
 
   return (
-    <section
-      ref={sectionRef}
-      className="relative h-screen overflow-hidden flex flex-col pt-24 md:pt-28 pb-8 md:pb-10"
-    >
-      <div className="shrink-0 px-6 md:px-10 mb-4 md:mb-6 font-mono text-xs uppercase tracking-widest opacity-60">
-        Selected Work — Scroll
-      </div>
+    <section ref={sectionRef} className="px-6 md:px-10 py-16 md:py-24">
+      <div className="flex flex-col gap-28 md:gap-44">
+        {projects.map((project, i) => {
+          const Icon = iconForCategory(project.category);
+          const reversed = i % 2 === 1;
+          const index = String(i + 1).padStart(2, '0');
 
-      <div
-        ref={trackRef}
-        className="flex-1 min-h-0 flex items-center gap-8 md:gap-14 px-[8vw] md:px-[10vw] will-change-transform"
-        style={{ width: 'max-content' }}
-      >
-        {projects.map((project, i) => (
-          <div
-            key={project.id}
-            ref={(el) => { cardRefs.current[i] = el; }}
-            className="relative w-[78vw] md:w-[34vw] shrink-0 h-full flex flex-col group"
-            style={{ transformStyle: 'preserve-3d' }}
-          >
-            <a href={project.href ?? '#'} className="flex flex-col h-full">
-              <div
-                className="relative flex-1 min-h-0 overflow-hidden rounded-sm"
-                style={{ background: 'var(--surface)', border: '1px solid var(--line)' }}
+          return (
+            <div key={project.id} className="work-row relative">
+              {/* large index numeral, sits behind the row */}
+              <span
+                className="font-display absolute -top-10 md:-top-16 select-none pointer-events-none"
+                style={{
+                  [reversed ? 'right' : 'left']: 0,
+                  fontSize: 'clamp(64px, 10vw, 140px)',
+                  lineHeight: 1,
+                  color: 'var(--fg)',
+                  opacity: 0.05,
+                }}
               >
-                <Image
-                  src={project.image}
-                  alt={project.title}
-                  fill
-                  className="object-cover  group-hover:grayscale-0 transition-all duration-700 ease-signature scale-105 group-hover:scale-100"
-                  sizes="40vw"
-                />
+                {index}
+              </span>
+
+              <div
+                className={`grid lg:grid-cols-2 gap-10 lg:gap-20 items-center ${
+                  reversed ? 'lg:[&>*:first-child]:order-2' : ''
+                }`}
+              >
+                {/* Image */}
                 <div
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                  style={{ background: 'linear-gradient(to top, var(--ink, #1C1008)55, transparent 60%)' }}
-                />
-              </div>
-              <div className="shrink-0 flex items-start justify-between mt-3 md:mt-5">
-                <div>
-                  <span className="font-mono text-[11px] md:text-xs opacity-50">
-                    {project.id} — {project.category}
-                  </span>
-                  <h3 className="font-display text-2xl md:text-3xl mt-1">{project.title}</h3>
+                  className="work-image group relative aspect-[4/3] overflow-hidden rounded-sm"
+                  style={{ background: 'var(--surface)', border: '1px solid var(--line)' }}
+                >
+                  <Image
+                    src={project.image}
+                    alt={project.title}
+                    fill
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
+                    sizes="(min-width: 1024px) 45vw, 90vw"
+                  />
                 </div>
-                <span className="font-mono text-[11px] md:text-xs opacity-50 pt-1">{project.year}</span>
+
+                {/* Journey / narrative */}
+                <div>
+                  <div className="work-fade flex items-center gap-3 mb-7">
+                    <div
+                      className="flex items-center justify-center rounded-full shrink-0"
+                      style={{ width: 44, height: 44, border: '1px solid var(--line)' }}
+                    >
+                      <Icon size={18} strokeWidth={1.5} style={{ color: 'var(--accent)' }} />
+                    </div>
+                    <span className="font-mono text-xs uppercase tracking-widest opacity-50">
+                      {project.category} — {project.year}
+                    </span>
+                  </div>
+
+                  <h3 className="work-fade font-display text-4xl md:text-5xl leading-[1.05] mb-8 max-w-md">
+                    {project.title}
+                  </h3>
+
+                  <div className="flex flex-col gap-4 mb-8" style={{ borderLeft: '1px solid var(--line)' }}>
+                    {project.challenge && (
+                      <p className="work-fade text-sm md:text-base opacity-75 leading-relaxed max-w-md pl-5">
+                        <span className="font-mono text-[10px] uppercase tracking-widest opacity-50 block mb-1">
+                          The brief
+                        </span>
+                        {project.challenge}
+                      </p>
+                    )}
+                    {project.approach && (
+                      <p className="work-fade text-sm md:text-base opacity-75 leading-relaxed max-w-md pl-5">
+                        <span className="font-mono text-[10px] uppercase tracking-widest opacity-50 block mb-1">
+                          The approach
+                        </span>
+                        {project.approach}
+                      </p>
+                    )}
+                    {project.result && (
+                      <p className="work-fade text-sm md:text-base opacity-75 leading-relaxed max-w-md pl-5">
+                        <span className="font-mono text-[10px] uppercase tracking-widest opacity-50 block mb-1">
+                          The outcome
+                        </span>
+                        {project.result}
+                      </p>
+                    )}
+                  </div>
+
+                  {project.metricLabel && project.metricValue && (
+                    <div
+                      className="work-fade inline-block rounded-md px-6 py-4 mb-8"
+                      style={{ border: '1px solid var(--line)' }}
+                    >
+                      <p className="font-mono text-[10px] uppercase tracking-widest opacity-50 mb-1">
+                        {project.metricLabel}
+                      </p>
+                      <p className="font-display text-2xl" style={{ color: 'var(--accent)' }}>
+                        {project.metricValue}
+                      </p>
+                    </div>
+                  )}
+
+                  <a
+                    href={project.href ?? '#'}
+                    className="work-fade relative inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest group/link"
+                  >
+                    <span className="relative">
+                      View project
+                      <span
+                        className="absolute left-0 -bottom-1 w-full h-px origin-left scale-x-100 transition-transform duration-300 group-hover/link:scale-x-0"
+                        style={{ background: 'var(--fg)' }}
+                      />
+                      <span
+                        className="absolute left-0 -bottom-1 w-full h-px origin-right scale-x-0 transition-transform duration-300 delay-100 group-hover/link:scale-x-100"
+                        style={{ background: 'var(--accent)' }}
+                      />
+                    </span>
+                    <ArrowUpRight size={14} className="transition-transform duration-300 group-hover/link:translate-x-1 group-hover/link:-translate-y-1" />
+                  </a>
+                </div>
               </div>
-            </a>
-          </div>
-        ))}
+            </div>
+          );
+        })}
       </div>
     </section>
   );
